@@ -1,5 +1,6 @@
 "use client";
 import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { 
   Activity, 
   BookOpen, 
@@ -22,6 +23,7 @@ import {
 const FitraLandingPage = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -123,7 +125,10 @@ const FitraLandingPage = () => {
               <button className="text-gray-700 hover:text-purple-600 font-medium transition-colors">
                 Sign In
               </button>
-              <button className="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-6 py-2 rounded-full font-semibold hover:shadow-lg hover:scale-105 transition-all duration-300">
+              <button
+                className="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-6 py-2 rounded-full font-semibold hover:shadow-lg hover:scale-105 transition-all duration-300"
+                onClick={() => router.push("/auth/login")}
+              >
                 Get Started
               </button>
             </div>
@@ -148,7 +153,13 @@ const FitraLandingPage = () => {
               <a href="#testimonials" className="block px-3 py-2 text-gray-700 hover:text-purple-600">Reviews</a>
               <a href="#pricing" className="block px-3 py-2 text-gray-700 hover:text-purple-600">Pricing</a>
               <div className="pt-4 pb-2">
-                <button className="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white px-6 py-2 rounded-full font-semibold">
+                <button
+                  className="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white px-6 py-2 rounded-full font-semibold"
+                  onClick={() => {
+                    setIsMobileMenuOpen(false);
+                    router.push("/auth/login");
+                  }}
+                >
                   Get Started
                 </button>
               </div>
