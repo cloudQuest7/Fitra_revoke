@@ -191,32 +191,32 @@ const handleSubmit = async (e: HandleSubmitEvent): Promise<void> => {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-purple-50 flex">
+    <div className="min-h-screen bg-gradient-to-br from-zinc-100 to-yellow-50 flex">
       {/* Left Side - Form */}
       <div className="flex-1 flex items-center justify-center p-8">
         <div className="w-full max-w-md">
           {/* Logo */}
           <div className="text-center mb-8">
-            <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-purple-600 to-pink-600 rounded-2xl mb-4">
-              <Dumbbell className="w-8 h-8 text-white" />
+            <div className="inline-flex items-center justify-center w-16 h-16 bg-yellow-400 rounded-2xl mb-4">
+              <Dumbbell className="w-8 h-8 text-zinc-900" />
             </div>
-            <h1 className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+            <h1 className="text-3xl font-bold text-zinc-900">
               Fitra
             </h1>
-            <p className="text-gray-600 mt-2">
+            <p className="text-zinc-600 mt-2">
               {isLogin ? 'Welcome back to your fitness journey' : 'Start your transformation today'}
             </p>
           </div>
 
           {/* Form Toggle */}
-          <div className="bg-gray-100 rounded-xl p-1 mb-8">
+          <div className="bg-zinc-200 rounded-xl p-1 mb-8">
             <div className="grid grid-cols-2 gap-1">
               <button
                 onClick={() => setIsLogin(true)}
                 className={`py-2 px-4 rounded-lg font-medium transition-all duration-300 ${
                   isLogin
-                    ? 'bg-white text-purple-600 shadow-sm'
-                    : 'text-gray-600 hover:text-gray-800'
+                    ? 'bg-white text-yellow-600 shadow-sm'
+                    : 'text-zinc-600 hover:text-zinc-900'
                 }`}
               >
                 Sign In
@@ -225,8 +225,8 @@ const handleSubmit = async (e: HandleSubmitEvent): Promise<void> => {
                 onClick={() => setIsLogin(false)}
                 className={`py-2 px-4 rounded-lg font-medium transition-all duration-300 ${
                   !isLogin
-                    ? 'bg-white text-purple-600 shadow-sm'
-                    : 'text-gray-600 hover:text-gray-800'
+                    ? 'bg-white text-yellow-600 shadow-sm'
+                    : 'text-zinc-600 hover:text-zinc-900'
                 }`}
               >
                 Sign Up
@@ -337,11 +337,11 @@ const handleSubmit = async (e: HandleSubmitEvent): Promise<void> => {
               type="button"
               onClick={handleSubmit}
               disabled={isLoading}
-              className="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white py-3 px-4 rounded-xl font-semibold hover:from-purple-700 hover:to-pink-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center group"
+              className="w-full bg-yellow-400 hover:bg-yellow-500 text-zinc-900 py-3 px-4 rounded-xl font-semibold focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:ring-offset-2 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center group"
             >
               {isLoading ? (
                 <div className="flex items-center space-x-2">
-                  <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                  <div className="w-5 h-5 border-2 border-zinc-900 border-t-transparent rounded-full animate-spin"></div>
                   <span>Please wait...</span>
                 </div>
               ) : (
@@ -357,17 +357,16 @@ const handleSubmit = async (e: HandleSubmitEvent): Promise<void> => {
           <div className="mt-8">
             <div className="relative">
               <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-gray-300"></div>
+                <div className="w-full border-t border-zinc-300"></div>
               </div>
               <div className="relative flex justify-center text-sm">
-                <span className="px-2 bg-gradient-to-br from-slate-50 to-purple-50 text-gray-500">
+                <span className="px-2 bg-gradient-to-br from-zinc-100 to-yellow-50 text-zinc-500">
                   Or continue with
                 </span>
               </div>
             </div>
-
             <div className="mt-6 grid grid-cols-2 gap-3">
-              <button className="w-full inline-flex justify-center py-3 px-4 border border-gray-300 rounded-xl shadow-sm bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors duration-300">
+              <button className="w-full inline-flex justify-center py-3 px-4 border border-zinc-300 rounded-xl shadow-sm bg-white text-sm font-medium text-zinc-700 hover:bg-zinc-50 transition-colors duration-300">
                 <svg className="w-5 h-5" viewBox="0 0 24 24">
                   <path fill="currentColor" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
                   <path fill="currentColor" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
@@ -376,8 +375,7 @@ const handleSubmit = async (e: HandleSubmitEvent): Promise<void> => {
                 </svg>
                 <span className="ml-2">Google</span>
               </button>
-
-              <button className="w-full inline-flex justify-center py-3 px-4 border border-gray-300 rounded-xl shadow-sm bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors duration-300">
+              <button className="w-full inline-flex justify-center py-3 px-4 border border-zinc-300 rounded-xl shadow-sm bg-white text-sm font-medium text-zinc-700 hover:bg-zinc-50 transition-colors duration-300">
                 <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
                   <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
                 </svg>
@@ -388,11 +386,11 @@ const handleSubmit = async (e: HandleSubmitEvent): Promise<void> => {
 
           {/* Footer */}
           <div className="mt-8 text-center">
-            <p className="text-sm text-gray-600">
+            <p className="text-sm text-zinc-600">
               {isLogin ? "Don't have an account? " : "Already have an account? "}
               <button
                 onClick={() => setIsLogin(!isLogin)}
-                className="text-purple-600 hover:text-purple-700 font-medium"
+                className="text-yellow-600 hover:text-yellow-700 font-medium"
               >
                 {isLogin ? 'Sign up' : 'Sign in'}
               </button>
@@ -402,62 +400,59 @@ const handleSubmit = async (e: HandleSubmitEvent): Promise<void> => {
       </div>
 
       {/* Right Side - Benefits/Features */}
-      <div className="hidden lg:flex lg:flex-1 bg-gradient-to-br from-purple-600 to-pink-600 text-white p-12 items-center justify-center">
+      <div className="hidden lg:flex lg:flex-1 bg-gradient-to-br from-yellow-200 to-yellow-400 text-zinc-900 p-12 items-center justify-center">
         <div className="max-w-md">
           <div className="space-y-8">
             <div>
               <h2 className="text-4xl font-bold mb-4">
                 Transform Your Life
               </h2>
-              <p className="text-purple-100 text-lg leading-relaxed">
+              <p className="text-yellow-900 text-lg leading-relaxed">
                 Join thousands of people who have already started their fitness journey with Fitra. 
                 Track workouts, journal your progress, and find inner peace.
               </p>
             </div>
-
             <div className="space-y-6">
               {benefits.map((benefit, index) => (
                 <div key={index} className="flex items-start space-x-4">
-                  <div className="bg-white/20 p-3 rounded-xl">
-                    <div className="text-white">
+                  <div className="bg-yellow-300 p-3 rounded-xl">
+                    <div className="text-zinc-900">
                       {benefit.icon}
                     </div>
                   </div>
                   <div>
                     <h3 className="font-semibold text-lg mb-1">{benefit.title}</h3>
-                    <p className="text-purple-100">{benefit.description}</p>
+                    <p className="text-yellow-900">{benefit.description}</p>
                   </div>
                 </div>
               ))}
             </div>
-
-            <div className="bg-white/10 rounded-2xl p-6 backdrop-blur-sm">
+            <div className="bg-yellow-100 rounded-2xl p-6 backdrop-blur-sm">
               <div className="flex items-center space-x-4 mb-4">
-                <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center">
-                  <CheckCircle className="w-6 h-6" />
+                <div className="w-12 h-12 bg-yellow-300 rounded-full flex items-center justify-center">
+                  <CheckCircle className="w-6 h-6 text-zinc-900" />
                 </div>
                 <div>
                   <div className="font-semibold">Sarah M.</div>
-                  <div className="text-sm text-purple-200">Lost 15 lbs in 3 months</div>
+                  <div className="text-sm text-yellow-800">Lost 15 lbs in 3 months</div>
                 </div>
               </div>
-              <p className="text-purple-100 italic">
+              <p className="text-yellow-900 italic">
                 "Fitra helped me build sustainable habits. The meditation feature was a game-changer for my mental health!"
               </p>
             </div>
-
             <div className="flex items-center space-x-8">
               <div className="text-center">
                 <div className="text-3xl font-bold">50K+</div>
-                <div className="text-purple-200 text-sm">Happy Users</div>
+                <div className="text-yellow-800 text-sm">Happy Users</div>
               </div>
               <div className="text-center">
                 <div className="text-3xl font-bold">4.9</div>
-                <div className="text-purple-200 text-sm">App Rating</div>
+                <div className="text-yellow-800 text-sm">App Rating</div>
               </div>
               <div className="text-center">
                 <div className="text-3xl font-bold">1M+</div>
-                <div className="text-purple-200 text-sm">Workouts Tracked</div>
+                <div className="text-yellow-800 text-sm">Workouts Tracked</div>
               </div>
             </div>
           </div>
