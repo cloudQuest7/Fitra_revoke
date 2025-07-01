@@ -1,25 +1,10 @@
 "use client";
 
 import React, { useState } from 'react';
-import { 
-  Eye, 
-  EyeOff, 
-  Mail, 
-  Lock, 
-  User, 
-  ArrowRight, 
-  Dumbbell,
-  Activity,
-  Heart,
-  Zap,
-  CheckCircle,
-  AlertCircle
-} from 'lucide-react';
+import { Eye, EyeOff, Dumbbell } from 'lucide-react';
 
-const AuthPages = () => {
+const AuthForm: React.FC = () => {
   const [isLogin, setIsLogin] = useState(true);
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -30,436 +15,213 @@ const AuthPages = () => {
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-interface FormData {
-    email: string;
-    password: string;
-    confirmPassword: string;
-    firstName: string;
-    lastName: string;
-    agreeToTerms: boolean;
-}
-
-interface InputFieldProps extends React.InputHTMLAttributes<HTMLInputElement> {
-    label: string;
-    name: keyof FormData;
-    type?: string;
-    placeholder?: string;
-    icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
-    showPasswordToggle?: boolean;
-    showPassword?: boolean;
-    onTogglePassword?: () => void;
-    error?: string;
-}
-
-const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement>
-): void => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target;
     setFormData(prev => ({
-        ...prev,
-        [name]: type === 'checkbox' ? checked : value
+      ...prev,
+      [name]: type === 'checkbox' ? checked : value
     }));
-
-    // Clear error when user starts typing
-    if (errors[name]) {
-        setErrors(prev => ({ ...prev, [name]: '' }));
-    }
-};
+    if (errors[name]) setErrors(prev => ({ ...prev, [name]: '' }));
+  };
 
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
-    
-    if (!formData.email) {
-      newErrors.email = 'Email is required';
-    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = 'Please enter a valid email';
-    }
-    
-    if (!formData.password) {
-      newErrors.password = 'Password is required';
-    } else if (formData.password.length < 6) {
-      newErrors.password = 'Password must be at least 6 characters';
-    }
-    
+    if (!formData.email) newErrors.email = 'Email is required';
+    else if (!/\S+@\S+\.\S+/.test(formData.email)) newErrors.email = 'Invalid email';
+    if (!formData.password) newErrors.password = 'Password is required';
+    else if (formData.password.length < 6) newErrors.password = 'Min 6 characters';
     if (!isLogin) {
-      if (!formData.firstName) {
-        newErrors.firstName = 'First name is required';
-      }
-      if (!formData.lastName) {
-        newErrors.lastName = 'Last name is required';
-      }
-      if (formData.password !== formData.confirmPassword) {
-        newErrors.confirmPassword = 'Passwords do not match';
-      }
-      if (!formData.agreeToTerms) {
-        newErrors.agreeToTerms = 'Please agree to the terms and conditions';
-      }
+      if (!formData.firstName) newErrors.firstName = 'First name required';
+      if (!formData.lastName) newErrors.lastName = 'Last name required';
+      if (formData.password !== formData.confirmPassword) newErrors.confirmPassword = 'Passwords do not match';
+      if (!formData.agreeToTerms) newErrors.agreeToTerms = 'Agree to terms';
     }
-    
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
-interface HandleSubmitEvent extends React.FormEvent<HTMLButtonElement> {}
-
-const handleSubmit = async (e: HandleSubmitEvent): Promise<void> => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
     if (!validateForm()) return;
-
     setIsLoading(true);
-
-    // Simulate API call
-    setTimeout(() => {
+    if (isLogin) {
+      // Simulate login (replace with real login logic if needed)
+      setTimeout(() => {
         setIsLoading(false);
-        console.log('Form submitted:', formData);
-        // Here you would typically redirect to dashboard
-    }, 2000);
-};
-
-  const InputField: React.FC<InputFieldProps> = ({ 
-    label, 
-    name, 
-    type = 'text', 
-    placeholder, 
-    icon: Icon, 
-    showPasswordToggle = false,
-    showPassword = false,
-    onTogglePassword,
-    error,
-    ...props 
-  }) => (
-    <div className="space-y-2">
-      <label className="text-sm font-medium text-gray-700 block">
-        {label}
-      </label>
-      <div className="relative">
-        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-          <Icon className="h-5 w-5 text-gray-400" />
-        </div>
-        <input
-          type={showPasswordToggle ? (showPassword ? 'text' : 'password') : type}
-          name={name}
-          placeholder={placeholder}
-          className={`w-full pl-10 pr-12 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300 ${
-            error ? 'border-red-500 bg-red-50' : 'border-gray-300 bg-white hover:border-gray-400'
-          }`}
-          value={typeof formData[name] === 'boolean' ? '' : formData[name]}
-          onChange={handleInputChange}
-          {...props}
-        />
-        {showPasswordToggle && (
-          <button
-            type="button"
-            className="absolute inset-y-0 right-0 pr-3 flex items-center"
-            onClick={onTogglePassword}
-          >
-            {showPassword ? (
-              <EyeOff className="h-5 w-5 text-gray-400 hover:text-gray-600" />
-            ) : (
-              <Eye className="h-5 w-5 text-gray-400 hover:text-gray-600" />
-            )}
-          </button>
-        )}
-      </div>
-      {error && (
-        <div className="flex items-center space-x-2 text-red-600 text-sm">
-          <AlertCircle className="h-4 w-4" />
-          <span>{error}</span>
-        </div>
-      )}
-    </div>
-  );
-
-  const benefits = [
-    {
-      icon: <Activity className="w-6 h-6" />,
-      title: "Smart Tracking",
-      description: "AI-powered workout and progress tracking"
-    },
-    {
-      icon: <Heart className="w-6 h-6" />,
-      title: "Wellness Journal",
-      description: "Track your mental and physical well-being"
-    },
-    {
-      icon: <Zap className="w-6 h-6" />,
-      title: "Personalized Plans",
-      description: "Customized workouts and meditation sessions"
+        window.location.href = "/home";
+      }, 1200);
+    } else {
+      // Signup: send data to backend
+      try {
+        const res = await fetch("/api/auth/signup", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            email: formData.email,
+            password: formData.password,
+            name: formData.firstName + " " + formData.lastName
+          })
+        });
+        const data = await res.json();
+        if (res.ok) {
+          setIsLoading(false);
+          window.location.href = "/home";
+        } else {
+          setIsLoading(false);
+          setErrors(prev => ({ ...prev, email: data.error || "Signup failed" }));
+        }
+      } catch (err) {
+        setIsLoading(false);
+        setErrors(prev => ({ ...prev, email: "Signup failed. Try again." }));
+      }
     }
-  ];
+  };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-zinc-100 to-yellow-50 flex">
-      {/* Left Side - Form */}
-      <div className="flex-1 flex items-center justify-center p-8">
-        <div className="w-full max-w-md">
-          {/* Logo */}
-          <div className="text-center mb-8">
-            <div className="inline-flex items-center justify-center w-16 h-16 bg-yellow-400 rounded-2xl mb-4">
-              <Dumbbell className="w-8 h-8 text-zinc-900" />
-            </div>
-            <h1 className="text-3xl font-bold text-zinc-900">
-              Fitra
-            </h1>
-            <p className="text-zinc-600 mt-2">
-              {isLogin ? 'Welcome back to your fitness journey' : 'Start your transformation today'}
-            </p>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-yellow-50 to-zinc-100">
+      <div className="w-full max-w-md bg-white/90 rounded-2xl shadow-2xl p-8 border border-yellow-100">
+        <div className="text-center mb-8">
+          <div className="inline-flex items-center justify-center w-16 h-16 bg-yellow-400 rounded-2xl mb-4 shadow-lg">
+            <Dumbbell className="w-8 h-8 text-zinc-900" />
           </div>
-
-          {/* Form Toggle */}
-          <div className="bg-zinc-200 rounded-xl p-1 mb-8">
-            <div className="grid grid-cols-2 gap-1">
-              <button
-                onClick={() => setIsLogin(true)}
-                className={`py-2 px-4 rounded-lg font-medium transition-all duration-300 ${
-                  isLogin
-                    ? 'bg-white text-yellow-600 shadow-sm'
-                    : 'text-zinc-600 hover:text-zinc-900'
-                }`}
-              >
-                Sign In
-              </button>
-              <button
-                onClick={() => setIsLogin(false)}
-                className={`py-2 px-4 rounded-lg font-medium transition-all duration-300 ${
-                  !isLogin
-                    ? 'bg-white text-yellow-600 shadow-sm'
-                    : 'text-zinc-600 hover:text-zinc-900'
-                }`}
-              >
-                Sign Up
-              </button>
-            </div>
-          </div>
-
-          {/* Form */}
-          <div className="space-y-6">
-            {!isLogin && (
-              <div className="grid grid-cols-2 gap-4">
-                <InputField
-                  label="First Name"
+          <h1 className="text-3xl font-extrabold text-zinc-900 tracking-tight">Fitra</h1>
+          <p className="text-zinc-600 mt-2 text-base">{isLogin ? 'Welcome back! Sign in to continue.' : 'Create your account and start your journey.'}</p>
+        </div>
+        <div className="flex mb-8 rounded-lg overflow-hidden border border-zinc-200">
+          <button
+            className={`flex-1 py-2 font-semibold transition-all duration-200 ${isLogin ? 'bg-yellow-400 text-zinc-900' : 'bg-zinc-100 text-zinc-600 hover:bg-yellow-100'}`}
+            onClick={() => setIsLogin(true)}
+            type="button"
+          >Sign In</button>
+          <button
+            className={`flex-1 py-2 font-semibold transition-all duration-200 ${!isLogin ? 'bg-yellow-400 text-zinc-900' : 'bg-zinc-100 text-zinc-600 hover:bg-yellow-100'}`}
+            onClick={() => setIsLogin(false)}
+            type="button"
+          >Sign Up</button>
+        </div>
+        <form onSubmit={handleSubmit} autoComplete="off" className="space-y-5">
+          {!isLogin && (
+            <div className="flex gap-3">
+              <div className="flex-1">
+                <label htmlFor="firstName" className="block text-sm font-medium text-zinc-700 mb-1">First Name</label>
+                <input
+                  id="firstName"
                   name="firstName"
+                  type="text"
+                  autoComplete="given-name"
+                  value={formData.firstName}
+                  onChange={handleInputChange}
                   placeholder="John"
-                  icon={User}
-                  error={errors.firstName}
+                  className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-400 text-black ${errors.firstName ? 'border-red-500 bg-red-50' : 'border-zinc-300 bg-white'}`}
                 />
-                <InputField
-                  label="Last Name"
-                  name="lastName"
-                  placeholder="Doe"
-                  icon={User}
-                  error={errors.lastName}
-                />
+                {errors.firstName && <div className="text-red-600 text-xs mt-1">{errors.firstName}</div>}
               </div>
-            )}
-
-            <InputField
-              label="Email Address"
+              <div className="flex-1">
+                <label htmlFor="lastName" className="block text-sm font-medium text-zinc-700 mb-1">Last Name</label>
+                <input
+                  id="lastName"
+                  name="lastName"
+                  type="text"
+                  autoComplete="family-name"
+                  value={formData.lastName}
+                  onChange={handleInputChange}
+                  placeholder="Doe"
+                  className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-400 text-black ${errors.lastName ? 'border-red-500 bg-red-50' : 'border-zinc-300 bg-white'}`}
+                />
+                {errors.lastName && <div className="text-red-600 text-xs mt-1">{errors.lastName}</div>}
+              </div>
+            </div>
+          )}
+          <div>
+            <label htmlFor="email" className="block text-sm font-medium text-zinc-700 mb-1">Email</label>
+            <input
+              id="email"
               name="email"
               type="email"
-              placeholder="john@example.com"
-              icon={Mail}
-              error={errors.email}
+              autoComplete="email"
+              value={formData.email}
+              onChange={handleInputChange}
+              placeholder="you@example.com"
+              className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-400 text-black ${errors.email ? 'border-red-500 bg-red-50' : 'border-zinc-300 bg-white'}`}
             />
-
-            <InputField
-              label="Password"
+            {errors.email && <div className="text-red-600 text-xs mt-1">{errors.email}</div>}
+          </div>
+          <div className="relative">
+            <label htmlFor="password" className="block text-sm font-medium text-zinc-700 mb-1">Password</label>
+            <input
+              id="password"
               name="password"
+              type={showPassword ? 'text' : 'password'}
+              autoComplete={isLogin ? 'current-password' : 'new-password'}
+              value={formData.password}
+              onChange={handleInputChange}
               placeholder="Enter your password"
-              icon={Lock}
-              showPasswordToggle={true}
-              showPassword={showPassword}
-              onTogglePassword={() => setShowPassword(!showPassword)}
-              error={errors.password}
+              className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-400 pr-10 text-black ${errors.password ? 'border-red-500 bg-red-50' : 'border-zinc-300 bg-white'}`}
             />
-
-            {!isLogin && (
-              <InputField
-                label="Confirm Password"
-                name="confirmPassword"
-                placeholder="Confirm your password"
-                icon={Lock}
-                showPasswordToggle={true}
-                showPassword={showConfirmPassword}
-                onTogglePassword={() => setShowConfirmPassword(!showConfirmPassword)}
-                error={errors.confirmPassword}
-              />
-            )}
-
-            {isLogin && (
-              <div className="flex items-center justify-between">
-                <label className="flex items-center">
-                  <input
-                    type="checkbox"
-                    className="w-4 h-4 text-purple-600 border-gray-300 rounded focus:ring-purple-500"
-                  />
-                  <span className="ml-2 text-sm text-gray-600">Remember me</span>
-                </label>
-                <a href="#" className="text-sm text-purple-600 hover:text-purple-700 font-medium">
-                  Forgot password?
-                </a>
-              </div>
-            )}
-
-            {!isLogin && (
-              <div className="space-y-4">
-                <label className="flex items-start space-x-3">
-                  <input
-                    type="checkbox"
-                    name="agreeToTerms"
-                    checked={formData.agreeToTerms}
-                    onChange={handleInputChange}
-                    className="w-4 h-4 text-purple-600 border-gray-300 rounded focus:ring-purple-500 mt-1"
-                  />
-                  <span className="text-sm text-gray-600">
-                    I agree to the{' '}
-                    <a href="#" className="text-purple-600 hover:text-purple-700 font-medium">
-                      Terms of Service
-                    </a>{' '}
-                    and{' '}
-                    <a href="#" className="text-purple-600 hover:text-purple-700 font-medium">
-                      Privacy Policy
-                    </a>
-                  </span>
-                </label>
-                {errors.agreeToTerms && (
-                  <div className="flex items-center space-x-2 text-red-600 text-sm">
-                    <AlertCircle className="h-4 w-4" />
-                    <span>{errors.agreeToTerms}</span>
-                  </div>
-                )}
-              </div>
-            )}
-
             <button
               type="button"
-              onClick={handleSubmit}
-              disabled={isLoading}
-              className="w-full bg-yellow-400 hover:bg-yellow-500 text-zinc-900 py-3 px-4 rounded-xl font-semibold focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:ring-offset-2 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center group"
+              tabIndex={-1}
+              className="absolute right-2 top-8 transform -translate-y-1/2 text-zinc-400 hover:text-zinc-700"
+              onClick={() => setShowPassword(v => !v)}
             >
-              {isLoading ? (
-                <div className="flex items-center space-x-2">
-                  <div className="w-5 h-5 border-2 border-zinc-900 border-t-transparent rounded-full animate-spin"></div>
-                  <span>Please wait...</span>
-                </div>
-              ) : (
-                <>
-                  {isLogin ? 'Sign In' : 'Create Account'}
-                  <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
-                </>
-              )}
+              {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
             </button>
+            {errors.password && <div className="text-red-600 text-xs mt-1">{errors.password}</div>}
           </div>
-
-          {/* Social Login */}
-          <div className="mt-8">
+          {!isLogin && (
             <div className="relative">
-              <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-zinc-300"></div>
-              </div>
-              <div className="relative flex justify-center text-sm">
-                <span className="px-2 bg-gradient-to-br from-zinc-100 to-yellow-50 text-zinc-500">
-                  Or continue with
-                </span>
-              </div>
-            </div>
-            <div className="mt-6 grid grid-cols-2 gap-3">
-              <button className="w-full inline-flex justify-center py-3 px-4 border border-zinc-300 rounded-xl shadow-sm bg-white text-sm font-medium text-zinc-700 hover:bg-zinc-50 transition-colors duration-300">
-                <svg className="w-5 h-5" viewBox="0 0 24 24">
-                  <path fill="currentColor" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-                  <path fill="currentColor" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-                  <path fill="currentColor" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
-                  <path fill="currentColor" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
-                </svg>
-                <span className="ml-2">Google</span>
-              </button>
-              <button className="w-full inline-flex justify-center py-3 px-4 border border-zinc-300 rounded-xl shadow-sm bg-white text-sm font-medium text-zinc-700 hover:bg-zinc-50 transition-colors duration-300">
-                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
-                </svg>
-                <span className="ml-2">Facebook</span>
-              </button>
-            </div>
-          </div>
-
-          {/* Footer */}
-          <div className="mt-8 text-center">
-            <p className="text-sm text-zinc-600">
-              {isLogin ? "Don't have an account? " : "Already have an account? "}
+              <label htmlFor="confirmPassword" className="block text-sm font-medium text-zinc-700 mb-1">Confirm Password</label>
+              <input
+                id="confirmPassword"
+                name="confirmPassword"
+                type={showConfirmPassword ? 'text' : 'password'}
+                autoComplete="new-password"
+                value={formData.confirmPassword}
+                onChange={handleInputChange}
+                placeholder="Confirm your password"
+                className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-400 pr-10 text-black ${errors.confirmPassword ? 'border-red-500 bg-red-50' : 'border-zinc-300 bg-white'}`}
+              />
               <button
-                onClick={() => setIsLogin(!isLogin)}
-                className="text-yellow-600 hover:text-yellow-700 font-medium"
+                type="button"
+                tabIndex={-1}
+                className="absolute right-2 top-8 transform -translate-y-1/2 text-zinc-400 hover:text-zinc-700"
+                onClick={() => setShowConfirmPassword(v => !v)}
               >
-                {isLogin ? 'Sign up' : 'Sign in'}
+                {showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
               </button>
-            </p>
-          </div>
-        </div>
-      </div>
-
-      {/* Right Side - Benefits/Features */}
-      <div className="hidden lg:flex lg:flex-1 bg-gradient-to-br from-yellow-200 to-yellow-400 text-zinc-900 p-12 items-center justify-center">
-        <div className="max-w-md">
-          <div className="space-y-8">
-            <div>
-              <h2 className="text-4xl font-bold mb-4">
-                Transform Your Life
-              </h2>
-              <p className="text-yellow-900 text-lg leading-relaxed">
-                Join thousands of people who have already started their fitness journey with Fitra. 
-                Track workouts, journal your progress, and find inner peace.
-              </p>
+              {errors.confirmPassword && <div className="text-red-600 text-xs mt-1">{errors.confirmPassword}</div>}
             </div>
-            <div className="space-y-6">
-              {benefits.map((benefit, index) => (
-                <div key={index} className="flex items-start space-x-4">
-                  <div className="bg-yellow-300 p-3 rounded-xl">
-                    <div className="text-zinc-900">
-                      {benefit.icon}
-                    </div>
-                  </div>
-                  <div>
-                    <h3 className="font-semibold text-lg mb-1">{benefit.title}</h3>
-                    <p className="text-yellow-900">{benefit.description}</p>
-                  </div>
-                </div>
-              ))}
+          )}
+          {!isLogin && (
+            <div className="flex items-center mb-2 mt-2">
+              <input
+                id="agreeToTerms"
+                name="agreeToTerms"
+                type="checkbox"
+                checked={formData.agreeToTerms}
+                onChange={handleInputChange}
+                className="w-4 h-4 text-yellow-600 border-gray-300 rounded focus:ring-yellow-500"
+              />
+              <label htmlFor="agreeToTerms" className="ml-2 text-sm text-gray-600">
+                I agree to the <a href="#" className="text-yellow-600 hover:underline">Terms</a> and <a href="#" className="text-yellow-600 hover:underline">Privacy Policy</a>
+              </label>
+              {errors.agreeToTerms && <div className="text-red-600 text-xs ml-2">{errors.agreeToTerms}</div>}
             </div>
-            <div className="bg-yellow-100 rounded-2xl p-6 backdrop-blur-sm">
-              <div className="flex items-center space-x-4 mb-4">
-                <div className="w-12 h-12 bg-yellow-300 rounded-full flex items-center justify-center">
-                  <CheckCircle className="w-6 h-6 text-zinc-900" />
-                </div>
-                <div>
-                  <div className="font-semibold">Sarah M.</div>
-                  <div className="text-sm text-yellow-800">Lost 15 lbs in 3 months</div>
-                </div>
-              </div>
-              <p className="text-yellow-900 italic">
-                "Fitra helped me build sustainable habits. The meditation feature was a game-changer for my mental health!"
-              </p>
-            </div>
-            <div className="flex items-center space-x-8">
-              <div className="text-center">
-                <div className="text-3xl font-bold">50K+</div>
-                <div className="text-yellow-800 text-sm">Happy Users</div>
-              </div>
-              <div className="text-center">
-                <div className="text-3xl font-bold">4.9</div>
-                <div className="text-yellow-800 text-sm">App Rating</div>
-              </div>
-              <div className="text-center">
-                <div className="text-3xl font-bold">1M+</div>
-                <div className="text-yellow-800 text-sm">Workouts Tracked</div>
-              </div>
-            </div>
-          </div>
-        </div>
+          )}
+          <button
+            type="submit"
+            disabled={isLoading}
+            className="w-full bg-yellow-400 hover:bg-yellow-500 text-zinc-900 py-3 px-4 rounded-lg font-semibold focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:ring-offset-2 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed mt-2 shadow-md"
+          >
+            {isLoading ? 'Please wait...' : isLogin ? 'Sign In' : 'Sign Up'}
+          </button>
+        </form>
       </div>
     </div>
   );
 };
 
-export default AuthPages;
+export default AuthForm;
